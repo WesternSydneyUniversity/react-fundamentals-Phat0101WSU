@@ -80,3 +80,8 @@
 .checkbox .round input[type="checkbox"]:checked + label:after {
   opacity: 1;
 }
+
+.titleCompleted {
+  flex:1;
+  text-decoration: line-through;
+}

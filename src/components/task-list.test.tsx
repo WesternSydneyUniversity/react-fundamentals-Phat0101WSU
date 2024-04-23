@@ -5,7 +5,12 @@ import { TaskList } from "./task-list";
 
 describe("Task List", function () {
   it("Renders the number of active tasks", function () {
-    render(<TaskList tasks={[]} />);
+    render(<TaskList tasks={[]}
+      onTaskStateChange={() =>{}}
+      onNewTaskChange={() =>{}}
+      onAddTask={() =>{}}
+      newTask=""
+      onDeleteTask={() =>{}} />);
     expect(screen.getByText("0 tasks")).toBeInTheDocument();
   });
 
@@ -16,6 +21,11 @@ describe("Task List", function () {
           { id: "1", title: "Task 1", state: "ACTIVE" },
           { id: "2", title: "Task 1", state: "COMPLETED" }
         ]}
+        onTaskStateChange={() =>{}}
+      onNewTaskChange={() =>{}}
+      onAddTask={() =>{}}
+      newTask=""
+      onDeleteTask={() =>{}} 
       />
     );
     expect(screen.getByText("1 task")).toBeInTheDocument();
@@ -29,6 +39,11 @@ describe("Task List", function () {
           { id: "2", title: "Task 2", state: "COMPLETED" },
           { id: "3", title: "Task 3", state: "ACTIVE" }
         ]}
+        onTaskStateChange={() =>{}}
+      onNewTaskChange={() =>{}}
+      onAddTask={() =>{}}
+      newTask=""
+      onDeleteTask={() =>{}} 
       />
     );
     expect(screen.getByText("2 tasks")).toBeInTheDocument();
@@ -41,6 +56,11 @@ describe("Task List", function () {
           { id: "1", title: "Task 1", state: "ACTIVE" },
           { id: "2", title: "Task 2", state: "COMPLETED" }
         ]}
+        onTaskStateChange={() =>{}}
+      onNewTaskChange={() =>{}}
+      onAddTask={() =>{}}
+      newTask=""
+      onDeleteTask={() =>{}} 
       />
     );
     expect(screen.getByText("Task 1")).not.toHaveStyle(
@@ -58,6 +78,11 @@ describe("Task List", function () {
           { id: "1", title: "Task 1", state: "ACTIVE" },
           { id: "2", title: "Task 2", state: "COMPLETED" }
         ]}
+        onTaskStateChange={() =>{}}
+      onNewTaskChange={() =>{}}
+      onAddTask={() =>{}}
+      newTask=""
+      onDeleteTask={() =>{}} 
       />
     );
     expect(screen.getByText("Task 1")).not.toHaveStyle(
@@ -71,7 +96,12 @@ describe("Task List", function () {
   });
 
   it("Adds task via the input box and changes the counter", async function () {
-    render(<TaskList tasks={[]} />);
+    render(<TaskList tasks={[]} 
+      onTaskStateChange={() =>{}}
+      onNewTaskChange={() =>{}}
+      onAddTask={() =>{}}
+      newTask=""
+      onDeleteTask={() =>{}} />);
     expect(screen.getByText("0 tasks")).toBeInTheDocument();
 
     await userEvent.type(
@@ -93,6 +123,11 @@ describe("Task List", function () {
           { id: "1", title: "Task 1", state: "ACTIVE" },
           { id: "2", title: "Task 2", state: "COMPLETED" }
         ]}
+        onTaskStateChange={() =>{}}
+      onNewTaskChange={() =>{}}
+      onAddTask={() =>{}}
+      newTask=""
+      onDeleteTask={() =>{}} 
       />
     );
     expect(screen.getByText("1 task")).toBeInTheDocument();

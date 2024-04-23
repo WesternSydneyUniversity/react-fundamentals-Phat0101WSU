@@ -9,16 +9,27 @@ export type Task = {
   state: "PINNED" | "COMPLETED" | "ACTIVE";
 };
 
-export function TaskList({ tasks }: { tasks: Task[] }) {
+const countActiveTasks = (tasks: Task[]): number => {
+  return tasks.filter((task) => task.state === "ACTIVE").length;
+}
+export function TaskList({ tasks, onTaskStateChange, onNewTaskChange, onAddTask, newTask, onDeleteTask }: {
+  tasks: Task[],
+  onTaskStateChange: (id: string, state: Task['state']) => void,
+  onNewTaskChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  onAddTask: () => void, 
+  newTask: string,
+  onDeleteTask: (id: string) => void
+}) {
+  const activeTasksCount = countActiveTasks(tasks);
   return (
     <>
       <div>
         <section className={styles.counter}>
-          <div className={styles.taskLabel}>0 tasks</div>
+          <div className={styles.taskLabel}>{activeTasksCount} active tasks</div>
         </section>
         <section className={styles.section}>
           {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} />
+            <TaskItem key={task.id} task={task} onTaskStateChange={onTaskStateChange} onDeleteTask={onDeleteTask}/>
           ))}
         </section>
       </div>
@@ -27,8 +38,10 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
           type="text"
           placeholder="What needs to be done?"
           className={styles.taskInput}
+          value={newTask}
+          onChange={onNewTaskChange}
         />
-        <button className={styles.taskButton}>Add Task</button>
+        <button className={styles.taskButton} onClick={onAddTask}>Add Task</button>
       </section>
     </>
   );
