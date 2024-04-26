@@ -1,35 +1,54 @@
-"use client";
+'use client'
 
-import { TaskItem } from "./task-item";
-import styles from "./task-list.module.css";
+import React, { useState } from 'react';
+import { TaskItem } from './task-item';
+import styles from './task-list.module.css';
 
 export type Task = {
   id: string;
   title: string;
-  state: "PINNED" | "COMPLETED" | "ACTIVE";
+  state: 'PINNED' | 'COMPLETED' | 'ACTIVE';
 };
 
+export type setState = React.Dispatch<React.SetStateAction<Task[]>>;
+
 const countActiveTasks = (tasks: Task[]): number => {
-  return tasks.filter((task) => task.state === "ACTIVE").length;
-}
-export function TaskList({ tasks, onTaskStateChange, onNewTaskChange, onAddTask, newTask, onDeleteTask }: {
-  tasks: Task[],
-  onTaskStateChange: (id: string, state: Task['state']) => void,
-  onNewTaskChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  onAddTask: () => void, 
-  newTask: string,
-  onDeleteTask: (id: string) => void
-}) {
-  const activeTasksCount = countActiveTasks(tasks);
+  return tasks.filter((task) => task.state === 'ACTIVE').length;
+};
+
+export function TaskList({tasks}: {tasks: Task[]}) {
+  const [taskObjs, setTasks] = useState(tasks);
+  const [newTask, setNewTask] = useState('');
+
+  const handleAddTask = () => {
+    const task: Task = {
+      id: Math.random().toString(),
+      title: newTask,
+      state: 'ACTIVE',
+    };
+    setTasks([...taskObjs, task]);
+    setNewTask('');
+  };
+
+  const handleTaskStateChange = (id: string, state: Task['state']) => {
+    setTasks(taskObjs.map(task => task.id === id ? { ...task, state } : task));
+  };
+
+  const handleDeleteTask = (id: string) => {
+    setTasks(taskObjs.filter(task => task.id !== id));
+  };
+
   return (
     <>
       <div>
         <section className={styles.counter}>
-          <div className={styles.taskLabel}>{activeTasksCount} active tasks</div>
+          <div className={styles.taskLabel}>
+          {countActiveTasks(taskObjs) === 1 ? '1 task' : `${countActiveTasks(taskObjs)} tasks`}
+            </div>
         </section>
         <section className={styles.section}>
-          {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} onTaskStateChange={onTaskStateChange} onDeleteTask={onDeleteTask}/>
+          {taskObjs.map((task) => (
+            <TaskItem key={task.id} task={task} onTaskStateChange={handleTaskStateChange} onDeleteTask={handleDeleteTask} />
           ))}
         </section>
       </div>
@@ -39,9 +58,9 @@ export function TaskList({ tasks, onTaskStateChange, onNewTaskChange, onAddTask,
           placeholder="What needs to be done?"
           className={styles.taskInput}
           value={newTask}
-          onChange={onNewTaskChange}
+          onChange={(e) => setNewTask(e.target.value)}
         />
-        <button className={styles.taskButton} onClick={onAddTask}>Add Task</button>
+        <button className={styles.taskButton} onClick={handleAddTask}>Add Task</button>
       </section>
     </>
   );

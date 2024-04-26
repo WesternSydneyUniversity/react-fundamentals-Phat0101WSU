@@ -1,13 +1,15 @@
 import type { Task } from "./task-list";
 
 import styles from "./task-item.module.css";
-import { TaskState } from "vitest";
+import React from "react";
 
-export function TaskItem({ task, onTaskStateChange, onDeleteTask }: {
-  task: Task,
-  onTaskStateChange: (id: string, state: Task['state']) => void,
-  onDeleteTask: (id: string) => void
-}) {
+interface TaskItemProps {
+  task: Task;
+  onTaskStateChange: (id: string, state: Task['state']) => void;
+  onDeleteTask: (id: string) => void;
+}
+
+export function TaskItem({ task, onTaskStateChange, onDeleteTask }: TaskItemProps) {
   const handleCheckboxTaskChange = () => {
     onTaskStateChange(task.id, task.state === "COMPLETED" ? "ACTIVE" : "COMPLETED");
   }
@@ -28,7 +30,9 @@ export function TaskItem({ task, onTaskStateChange, onDeleteTask }: {
           <label htmlFor={`task-${task.id}`}></label>
         </div>
       </div>
-      <span className={task.state === "COMPLETED" ? styles.titleCompleted : styles.title}>{task.title}</span>
+      <span style={task.state === "COMPLETED" ? { textDecoration: 'line-through' } : {}}>
+        {task.title}
+      </span>
       <div className={styles.actions}>
         <button
           data-testid={`delete-${task.id}`}
